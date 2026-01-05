@@ -50,22 +50,17 @@ export default function Home({ chapters }) {
           box-sizing: border-box;
         }
         
-        html {
-          background: #030303 !important;
-        }
-
         body {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-          background: #030303 !important;
+          background: #030303;
           color: #d7dadc;
           line-height: 1.6;
-          min-height: 100vh;
         }
 
         .container {
-          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
           padding: 0;
-          background: #030303;
         }
 
         .header {
@@ -91,6 +86,10 @@ export default function Home({ chapters }) {
           font-size: 1.3rem;
           font-weight: 500;
           color: #fff;
+        }
+
+        .header p {
+          display: none;
         }
 
         .auth-section {
@@ -142,6 +141,7 @@ export default function Home({ chapters }) {
           width: 32px;
           height: 32px;
           border-radius: 50%;
+          border: none;
         }
 
         .user-info span {
@@ -149,25 +149,15 @@ export default function Home({ chapters }) {
           color: #d7dadc;
         }
 
-        .layout {
-          display: flex;
-          width: 100%;
-          padding: 0;
-          align-items: flex-start;
-        }
-
         .sidebar {
-          width: 280px;
-          min-width: 280px;
-          max-width: 280px;
-          background: #1a1a1b;
-          padding: 1rem 0;
-          border-right: 1px solid #343536;
-          height: calc(100vh - 57px);
-          overflow-y: auto;
           position: sticky;
-          top: 57px;
-          left: 0;
+          top: 73px;
+          background: #1a1a1b;
+          padding: 0;
+          border-radius: 4px;
+          border: 1px solid #343536;
+          max-height: calc(100vh - 90px);
+          overflow-y: auto;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -204,6 +194,7 @@ export default function Home({ chapters }) {
           cursor: pointer;
           transition: all 0.2s;
           background: transparent;
+          border-left: none;
           font-size: 0.9rem;
           color: #d7dadc;
         }
@@ -214,6 +205,7 @@ export default function Home({ chapters }) {
 
         .chapter-item.active {
           background: #272729;
+          border-left: none;
           font-weight: 500;
           color: #fff;
         }
@@ -230,17 +222,40 @@ export default function Home({ chapters }) {
         }
 
         .main-content {
-          flex: 1;
-          padding: 1.5rem 2rem;
-          min-width: 0;
-          max-width: calc(100% - 280px);
-          background: #030303;
+          background: transparent;
+          padding: 0;
+          border-radius: 0;
+          box-shadow: none;
+          max-width: 100%;
+        }
+
+        .layout {
+          display: grid;
+          grid-template-columns: 250px 1fr;
+          gap: 1.5rem;
+          margin-bottom: 0;
+          align-items: start;
+          padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+          .layout {
+            grid-template-columns: 1fr;
+          }
+          
+          .sidebar {
+            position: relative;
+            top: 0;
+            max-height: none;
+          }
         }
 
         .chapter-title {
           font-size: 1.3rem;
           color: #d7dadc;
           margin-bottom: 1.2rem;
+          padding-bottom: 0;
+          border-bottom: none;
           font-weight: 500;
         }
 
@@ -251,16 +266,20 @@ export default function Home({ chapters }) {
           border-radius: 4px;
           border: 1px solid #343536;
           transition: all 0.2s;
+          border-left: none;
         }
 
         .paragraph-card:hover {
           border-color: #474748;
+          box-shadow: none;
+          transform: none;
         }
 
         .paragraph-content {
           font-size: 0.95rem;
           line-height: 1.6;
           margin-bottom: 0.8rem;
+          text-align: left;
           color: #d7dadc;
         }
 
@@ -273,13 +292,6 @@ export default function Home({ chapters }) {
           margin-top: 0.8rem;
           padding-top: 0.8rem;
           border-top: 1px solid #343536;
-        }
-
-        .stats {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.85rem;
-          color: #818384;
         }
 
         .comments-toggle {
@@ -356,48 +368,22 @@ export default function Home({ chapters }) {
           min-height: 80px;
         }
 
-        .comment-input:focus {
-          outline: none;
-          border-color: #0c71c7;
-          background: #1a1a1b;
-        }
-
-        .btn-submit {
-          background: #0079d3;
-          color: white;
-          margin-top: 0.5rem;
-          border-radius: 20px;
-          font-weight: 600;
-        }
-
-        .btn-submit:hover {
-          background: #0c71c7;
-        }
-
-        .no-comments {
-          text-align: center;
-          color: #818384;
+        . color: #818384;
           padding: 1rem;
           font-style: italic;
           font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
-          .layout {
-            flex-direction: column;
-          }
-          
-          .sidebar {
-            width: 100%;
-            max-width: 100%;
-            position: relative;
-            height: auto;
-          }
+        .stats {
+          display: flex;
+          gap: 1rem;
+          font-size: 0.85rem;
+          color: #818384;
+        }
 
-          .main-content {
-            width: 100%;
-            padding: 1rem;
-          }
+        .google-icon {
+          width: 18px;
+          height: 18px;
         }
       `}</style>
 
@@ -431,7 +417,7 @@ export default function Home({ chapters }) {
                 className={`chapter-item ${!selectedChapter ? 'all' : ''}`}
                 onClick={() => setSelectedChapter(null)}
               >
-                📚 Todos
+                📚 Todos los capítulos
               </li>
               {chapters.map(chapter => (
                 <li
@@ -464,7 +450,7 @@ export default function Home({ chapters }) {
                         className="comments-toggle"
                         onClick={() => handleExpandParagraph(paragraph.id)}
                       >
-                        {expandedParagraphs[paragraph.id] ? 'Ocultar' : 'Ver comentarios'}
+                        {expandedParagraphs[paragraph.id] ? 'Ocultar comentarios' : 'Ver comentarios'}
                       </button>
                     </div>
 
