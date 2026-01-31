@@ -30,7 +30,7 @@ dev.db
 dev.db-journal
 
 # Archivos pesados y scripts generados
-*.pdf
+
 # init_data.sql
 
 # Logs
