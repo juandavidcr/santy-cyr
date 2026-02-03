@@ -11,6 +11,8 @@ services:
       MYSQL_ROOT_PASSWORD: secret # Cambia por una contraseña segura
       MYSQL_USER: user_admin
       MYSQL_PASSWORD: secret
+      MYSQL_INITDB_SKIP_TZINFO: "true"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone='+00:00'
     ports:
       - "42341:3306" # Acceso externo (Host: 42341 -> Contenedor: 3306)
     volumes:
