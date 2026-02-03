@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Base de Datos MySQL
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: ciencia_religion_db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
+      MYSQL_USER: user_admin
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
+      MYSQL_INITDB_SKIP_TZINFO: "true"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone='+00:00'
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./init_data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Aplicación Web Next.js
+  web:
+    build: .
+    restart: always
+    environment:
+      DATABASE_URL: mysql://user_admin:${MYSQL_PASSWORD:-secret}@db:3306/ciencia_religion_db
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://cienciayreligion.synesiss.info}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
