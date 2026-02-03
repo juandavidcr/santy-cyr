@@ -34,13 +34,13 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       PORT: 3000
+    expose:
+      - "3000"
     depends_on:
       db:
         condition: service_healthy
     networks:
       - app-network
-    ports:
-      - "3000:3000"
 
 networks:
   app-network:
