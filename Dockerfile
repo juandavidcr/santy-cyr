@@ -32,8 +32,13 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+# Copiar schema de Prisma para ejecutar migraciones
+COPY --from=builder /app/prisma ./prisma
 # Copiamos el archivo SQL a la raíz por si necesitamos consultarlo
 COPY --from=builder /app/init_data.sql ./init_data.sql
+# Copiar script de entrypoint
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 3000
-CMD ["npm", "start"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
